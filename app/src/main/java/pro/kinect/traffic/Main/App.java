@@ -1,4 +1,4 @@
-package pro.kinect.traffic;
+package pro.kinect.traffic.Main;
 
 import android.app.Application;
 import android.util.Log;
@@ -17,12 +17,10 @@ import pro.kinect.traffic.Receivers.AlarmReceiver;
 public class App extends Application {
     public static final String LOG = "Traffic_LOG";
     public static final int TIME_UPDATE_TRAFFIC_COUNTERS = 1 * 60 * 1000; //1 min
-//    public static final int TIME_FLUSH_TRAFFIC_COUNTERS = 15 * 60 * 1000; //15 min
-    public static final int TIME_FLUSH_TRAFFIC_COUNTERS = 1 * 60 * 1000; //1 min
+    public static final int TIME_FLUSH_TRAFFIC_COUNTERS = 4 * 60 * 60 * 1000; //4 hours
 
     @Override
     public void onCreate() {
-        Log.d(App.LOG, "MainActivity.class -> isAppServiceRunning() - true" );
         super.onCreate();
 
         Configuration.Builder configurationBuilder = new Configuration.Builder(this);

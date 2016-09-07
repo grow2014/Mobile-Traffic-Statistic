@@ -1,9 +1,11 @@
-package pro.kinect.traffic;
+package pro.kinect.traffic.Utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+
+import pro.kinect.traffic.Main.App;
 
 /**
  * Created by http://kinect.pro © 07.09.16
@@ -13,7 +15,6 @@ import android.util.Log;
 public class Networks {
 
     public static boolean isNetworkAvailable(Context context) {
-        Log.d(App.LOG, "Networks.class -> isNetworkAvailable()");
         ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivity == null){
             return false;
@@ -37,7 +38,6 @@ public class Networks {
     }
 
     public static boolean isConnectedMobile(Context context){
-        Log.d(App.LOG, "Networks.class -> isConnectedMobile()");
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = cm.getActiveNetworkInfo();
         return (info != null && info.isConnected() && info.getType() == ConnectivityManager.TYPE_MOBILE);

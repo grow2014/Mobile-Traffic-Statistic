@@ -1,4 +1,4 @@
-package pro.kinect.traffic;
+package pro.kinect.traffic.Main;
 
 import android.app.IntentService;
 import android.content.ComponentName;
@@ -7,11 +7,10 @@ import android.content.Intent;
 import android.util.Log;
 
 import java.util.Calendar;
-import java.util.List;
 
-import pro.kinect.traffic.Models.AppItem;
 import pro.kinect.traffic.Receivers.AlarmReceiver;
 import pro.kinect.traffic.Retrofit.Calls;
+import pro.kinect.traffic.Utils.Prefs;
 
 /**
  * Created by http://kinect.pro © 07.09.16
@@ -31,9 +30,8 @@ public class AppService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d(App.LOG, "AppService.class -> onHandleIntent()");
 
-        Counters.updateNetTrafficCounters(getApplicationContext(), false);
+        Counters.updateNetTrafficCounters(getApplicationContext(), true);
 
         final long timestampNow = Calendar.getInstance().getTimeInMillis();
         long timestampLastFlush = Prefs.getLong(PREF_LAST_FLUSH_TIMESTAMP);
@@ -43,31 +41,7 @@ public class AppService extends IntentService {
         }
         // Is time to flush?
         if (timestampNow > timestampLastFlush + App.TIME_FLUSH_TRAFFIC_COUNTERS) {
-            // Sleep to let updater complete async db operations
-            try {
-                Thread.sleep(1000); // TODO: Make sure that ActiveAndroid will not sleep with this thread
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            Log.d(App.LOG, "AppService.class --->> Flush traffic counters");
-
-            //// TODO: 07.09.16  тут отправляем инфу на сервер и когда 200 - сохраняем таймстамп + чистим базу
-            List<AppItem> itemList = AppItem.getData();
-            if (itemList != null && itemList.size() > 0) {
-                for (AppItem item : itemList) {
-                    Log.d(App.LOG, "AppService.class ->"
-//                            + " item.getId()" + item.getId()
-//                            + ", item.uid: " + item.uid
-//                            + ", item.packageName: " + item.packageName
-//                            + " item.name: " + item.name
-                            + ", item.count: " + String.valueOf(item.wifiTotal + item.mobileTotal)
-                            + ", item.getJSON(): " + item.getJSON()
-                    );
-                }
-                Calls.getInstance().pushDataToServer();
-            }
-
+            Calls.getInstance().pushDataToServer();
             Prefs.save(PREF_LAST_FLUSH_TIMESTAMP, timestampNow);
 
         } else {
@@ -83,7 +57,6 @@ public class AppService extends IntentService {
      * @param intent
      */
     public static void start(Context context, Intent intent) {
-        Log.d(App.LOG, "AppService.class -> start()");
         if (intent == null) {
             intent = new Intent(AlarmReceiver.INTENT_ALARM_TRAFFIC_COUNTERS);
         }

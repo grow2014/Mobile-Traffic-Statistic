@@ -8,15 +8,18 @@ import android.util.Log;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import pro.kinect.traffic.App;
+import pro.kinect.traffic.Main.App;
 
 /**
  * Created by http://kinect.pro © 07.09.16
@@ -35,9 +38,6 @@ public class AppItem extends Model {
     @Column(name = "package_name")
     public String packageName;
 
-    /**
-     * Usage date without time e.g. getTimestamp(2014-09-05 00:00:00)
-     */
     @Column(name = "mobile_counter")
     public long mobileCounter;
 
@@ -54,7 +54,6 @@ public class AppItem extends Model {
     public long lastAbsolute;
 
     public static AppItem createFromApplicationInfo(Context context, ApplicationInfo applicationInfo) {
-        Log.d(App.LOG, "AppItem.class -> createFromApplicationInfo()");
         AppItem appItem = new AppItem();
         appItem.uid = applicationInfo.uid;
         appItem.name = getApplicationLabel(context, applicationInfo, Locale.getDefault());
@@ -63,36 +62,29 @@ public class AppItem extends Model {
     }
 
     private static String getApplicationLabel(Context context, ApplicationInfo applicationInfo, Locale locale) {
-        Log.d(App.LOG, "AppItem.class -> getApplicationLabel()");
         return applicationInfo.name != null && !applicationInfo.name.isEmpty() ?
                 applicationInfo.name :
                 context.getPackageManager().getApplicationLabel(applicationInfo).toString()
                 ;
     }
 
-    public JSONObject getJSON() {
-        Log.d(App.LOG, "AppItem.class -> getJSON()");
-        JSONObject result = new JSONObject();
-        try {
-            result.put("package", packageName);
-            result.put("name", name);
-            result.put("wifi", wifiCounter);
-            result.put("mobile", mobileCounter);
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return result;
-    }
-
-
-    public static List<AppItem> getData() {
+    public static List<AppItem> getFullData() {
         return new Select().from(AppItem.class)
-                .where(BaseColumns._ID + " > 0")
-                .and("wifi_total + mobile_total > 0")
+                .where("last_absolute > 0")
                 .orderBy("wifi_total + mobile_total DESC")
                 .limit(1000).execute();
     }
 
+    public static List<AppItem> getDataForServer() {
+        return new Select().from(AppItem.class)
+                .where("mobile_counter > 0")
+                .or("wifi_counter > 0")
+                .orderBy("wifi_total + mobile_total DESC")
+                .limit(1000).execute();
+    }
+
+    public static void clearItem(String uid) {
+        new Delete().from(AppItem.class).where("uid = ?", uid).execute();
+    }
 }

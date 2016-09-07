@@ -10,8 +10,8 @@ import android.util.Log;
 
 import java.util.Calendar;
 
-import pro.kinect.traffic.App;
-import pro.kinect.traffic.AppService;
+import pro.kinect.traffic.Main.App;
+import pro.kinect.traffic.Main.AppService;
 
 /**
  * Created by http://kinect.pro © 07.09.16
@@ -24,8 +24,6 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-        Log.d(App.LOG, "AlarmReceiver.class -> onReceive()");
-
         AppService.start(context, intent);
         setResultCode(Activity.RESULT_OK);
 
@@ -34,7 +32,6 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
     }
 
     public static void schedule(Context context) {
-        Log.d(App.LOG, "AlarmReceiver.class -> schedule()");
         Calendar calUpdater = Calendar.getInstance();
         calUpdater.add(Calendar.MILLISECOND, App.TIME_UPDATE_TRAFFIC_COUNTERS);
 

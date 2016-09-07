@@ -1,8 +1,10 @@
 package pro.kinect.traffic.Retrofit;
 
+import java.util.List;
+
+import pro.kinect.traffic.Models.QueryObject;
 import retrofit2.Call;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.Body;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 
@@ -12,10 +14,9 @@ import retrofit2.http.POST;
  */
 
 public interface APIService {
-    @FormUrlEncoded
     @POST("data_consumptions")
     Call<ServerResponse> pushToServer(
             @Header("Authorization") String header,
-            @Field("JSON") String array
+            @Body() List<QueryObject> objectList
     );
 }

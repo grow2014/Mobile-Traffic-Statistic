@@ -7,14 +7,19 @@ import com.google.gson.GsonBuilder;
 
 import java.lang.reflect.Modifier;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.internal.Platform;
 import okhttp3.logging.HttpLoggingInterceptor;
-import pro.kinect.traffic.App;
+import pro.kinect.traffic.Main.App;
 import pro.kinect.traffic.BuildConfig;
+import pro.kinect.traffic.Models.AppItem;
+import pro.kinect.traffic.Models.QueryObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -99,26 +104,43 @@ public class Calls {
 
 
     public void pushDataToServer() {
-        Log.d(App.LOG, "Calls.class -> pushDataToServer()");
+        List<AppItem> itemList = AppItem.getDataForServer();
+        if (itemList != null && itemList.size() > 0) {
+            List<QueryObject> objects = new ArrayList<>();
+            for (AppItem item : itemList) {
+                QueryObject queryObject = new QueryObject(
+                        item.packageName,
+                        simpleDateFormat.format(new Date()),
+                        String.valueOf(item.mobileCounter),
+                        item.name,
+                        String.valueOf(item.uid),
+                        String.valueOf(item.wifiCounter)
+                );
+                objects.add(queryObject);
+            }
 
-        Call<ServerResponse> call = service.pushToServer(getHeader(), "");
-        call.enqueue(new Callback<ServerResponse>() {
-            @Override
-            public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
 
-                if (response.code() == 200) {
-                    Log.d(App.LOG, "Calls.class -> pushDataToServer() -> Retrofit returned 200");
+            Call<ServerResponse> call = service.pushToServer(getHeader(), objects);
+            call.enqueue(new Callback<ServerResponse>() {
+                @Override
+                public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
 
-                } else { //not 200
-                    Log.d(App.LOG, "Calls.class -> pushDataToServer() -> Retrofit returned " + response.code());
+                    if (response.code() == 200) {
+                        ServerResponse.parse(response);
+
+                    } else { //not 200
+                        Log.d(App.LOG, "Calls.class -> pushDataToServer() -> Retrofit returned " + response.code());
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<ServerResponse> call, Throwable t) {
-                Log.d(App.LOG, "Calls.class -> pushDataToServer() -> onFailure() - " + t.getMessage());
-            }
-        });
+                @Override
+                public void onFailure(Call<ServerResponse> call, Throwable t) {
+                    Log.d(App.LOG, "Calls.class -> pushDataToServer() -> onFailure() - " + t.getMessage());
+                }
+            });
+        } else {
+            Log.e(App.LOG, "Calls.class -> pushDataToServer() - error - list is empty");
+        }
     }
 
 

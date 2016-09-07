@@ -1,4 +1,4 @@
-package pro.kinect.traffic;
+package pro.kinect.traffic.Main;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -6,11 +6,12 @@ import android.net.TrafficStats;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
 import pro.kinect.traffic.Models.AppItem;
+import pro.kinect.traffic.Utils.Networks;
+import pro.kinect.traffic.Utils.Prefs;
 
 /**
  * Created by http://kinect.pro © 07.09.16
@@ -27,8 +28,6 @@ public class Counters {
 
     public static List<AppItem> updateNetTrafficCounters(Context context, boolean isForcePackageSync) {
 
-        Log.d(App.LOG, "Counters.class -> updateNetTrafficCounters()");
-
         // Init
         if (sysUids == null) {
             initSystemUids(context);
@@ -39,16 +38,9 @@ public class Counters {
         // Use previously saved isMobile state for counters updating
         boolean isMobileLast = Counters.updateIsMobile(context, isMobileCurrent);
 
-        // Load today's apps from db
-//        List<AppItem> appsList = new Select()
-//                .from(AppItem.class)
-//                .where("timestamp >= ?", getDateTimestamp())
-//                .orderBy("wifi_total + mobile_total DESC")
-//                .execute();
-
-        List<AppItem> appsList = AppItem.getData();
-
-        // Fill list at first launch / new day or sync apps if new one was installed by user
+        // Load apps from db
+        List<AppItem> appsList = AppItem.getFullData();
+        // Fill list at first launch / sync apps if new one was installed by user
         if (appsList.isEmpty() || isForcePackageSync) {
             syncApplicationList(context, appsList);
         }
@@ -86,21 +78,6 @@ public class Counters {
     }
 
 
-    public static String usageTrafficFormat(long bytes) {
-        return
-                bytes >= 107374182400l ? String.format("%.0f GB", (float) bytes / 1073741824l) : (
-                        bytes >= 10737418240l ? String.format("%.1f GB", (float) bytes / 1073741824l) : (
-                                bytes >= 1073741824l ? String.format("%.2f GB", (float) bytes / 1073741824l) : (
-                                        bytes >= 104857600 ? String.format("%.0f MB", (float) bytes / 1048576) : (
-                                                bytes >= 10485760 ? String.format("%.1f MB", (float) bytes / 1048576) : (
-                                                        bytes >= 1048576 ? String.format("%.2f MB", (float) bytes / 1048576) : (
-                                                                bytes >= 102400 ? String.format("%.0f KB", (float) bytes / 1024) : (
-                                                                        bytes >= 10240 ? String.format("%.1f KB", (float) bytes / 1024) : (
-                                                                                bytes >= 1024 ? String.format("%.2f KB", (float) bytes / 1024) :
-                                                                                        String.format("%d", (int) bytes)
-                                                                        ))))))));
-    }
-
     /**
      * Synchronize given application list with installed/systems applications
      * <p/>
@@ -109,8 +86,6 @@ public class Counters {
      * @param appsList Application list being synced
      */
     private static void syncApplicationList(Context context, List<AppItem> appsList) {
-        Log.d(App.LOG, "Counters.class -> syncApplicationList()");
-
         // Index by package name
         HashMap<String, AppItem> appsHashMap = new HashMap<String, AppItem>();
         for (AppItem appItem : appsList) {
@@ -157,14 +132,6 @@ public class Counters {
     }
 
 
-    public static long getDateTimestamp() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        return calendar.getTime().getTime();
-    }
 
     /**
      * UIDs that have more than one application installed
