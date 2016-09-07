@@ -9,8 +9,8 @@ import android.util.Log;
 import java.util.Calendar;
 import java.util.List;
 
-import pro.kinect.traffic.models.AppItem;
-import pro.kinect.traffic.receiver.AlarmReceiver;
+import pro.kinect.traffic.Models.AppItem;
+import pro.kinect.traffic.Receivers.AlarmReceiver;
 
 /**
  * Created by http://kinect.pro © 07.09.16

@@ -1,4 +1,4 @@
-package pro.kinect.traffic.models;
+package pro.kinect.traffic.Models;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -13,7 +13,6 @@ import com.activeandroid.query.Select;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 

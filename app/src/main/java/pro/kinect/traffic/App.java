@@ -6,8 +6,8 @@ import android.util.Log;
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
 
-import pro.kinect.traffic.models.AppItem;
-import pro.kinect.traffic.receiver.AlarmReceiver;
+import pro.kinect.traffic.Models.AppItem;
+import pro.kinect.traffic.Receivers.AlarmReceiver;
 
 /**
  * Created by http://kinect.pro © 07.09.16

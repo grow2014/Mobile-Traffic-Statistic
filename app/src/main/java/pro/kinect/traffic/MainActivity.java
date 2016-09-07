@@ -6,7 +6,7 @@ import android.util.Log;
 
 import java.util.List;
 
-import pro.kinect.traffic.models.AppItem;
+import pro.kinect.traffic.Models.AppItem;
 
 public class MainActivity extends AppCompatActivity {
     @Override

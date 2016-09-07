@@ -5,14 +5,12 @@ import android.content.pm.ApplicationInfo;
 import android.net.TrafficStats;
 import android.util.Log;
 
-import com.activeandroid.query.Select;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import pro.kinect.traffic.models.AppItem;
+import pro.kinect.traffic.Models.AppItem;
 
 /**
  * Created by http://kinect.pro © 07.09.16

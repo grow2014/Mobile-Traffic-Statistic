@@ -34,7 +34,7 @@
 
         <!-- Start service on system boot -->
         <receiver
-            android:name=".receiver.BootReceiver"
+            android:name=".Receivers.BootReceiver"
             android:enabled="true"
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
             <intent-filter>
@@ -46,7 +46,7 @@
 
         <!-- Usage counters update scheduler -->
         <receiver
-            android:name=".receiver.AlarmReceiver"
+            android:name=".Receivers.AlarmReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="pro.kinect.traffic.ALARM_TRAFFIC_COUNTERS"/>
@@ -55,7 +55,7 @@
 
         <!-- Force counters update when connection state changes -->
         <receiver
-            android:name=".receiver.NetStateChangeReceiver"
+            android:name=".Receivers.NetStateChangeReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -65,7 +65,7 @@
         </receiver>
 
         <!-- Sync application list when new one installed by user -->
-        <receiver android:name=".receiver.PackageAddReceiver">
+        <receiver android:name=".Receivers.PackageAddReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED"/>
 

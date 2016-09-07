@@ -18,7 +18,16 @@ android {
         versionName "1.0"
     }
     buildTypes {
+
+        debug {
+            buildConfigField "String", "BASE_URL", '"https://app3.usetime.co/"'
+            buildConfigField "String", "API_PATH", '"api/v1/"'
+        }
+
         release {
+            buildConfigField "String", "BASE_URL", '"https://app3.usetime.co/"'
+            buildConfigField "String", "API_PATH", '"api/v1/"'
+
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -30,4 +39,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
+    compile 'com.squareup.retrofit2:retrofit:2.0.0-beta4'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.0.1'
+    compile 'com.squareup.okhttp3:okhttp:3.2.0'
 }

@@ -1,4 +1,4 @@
-package pro.kinect.traffic.receiver;
+package pro.kinect.traffic.Receivers;
 
 import android.app.Activity;
 import android.app.AlarmManager;

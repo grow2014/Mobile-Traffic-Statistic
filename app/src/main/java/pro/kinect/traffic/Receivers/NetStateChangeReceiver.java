@@ -1,4 +1,4 @@
-package pro.kinect.traffic.receiver;
+package pro.kinect.traffic.Receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,11 +13,11 @@ import pro.kinect.traffic.Counters;
  * Developer Andrii.Gakhov
  */
 
-public class PackageAddReceiver extends BroadcastReceiver {
+public class NetStateChangeReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(App.LOG, "PackageAddReceiver.class -> onReceive()");
-        Counters.updateNetTrafficCounters(context, true);
+        Log.d(App.LOG, "NetStateChangeReceiver.class -> onReceive()");
+        Counters.updateNetTrafficCounters(context, false);
     }
 }
