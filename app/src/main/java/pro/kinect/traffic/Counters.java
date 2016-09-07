@@ -42,11 +42,13 @@ public class Counters {
         boolean isMobileLast = Counters.updateIsMobile(context, isMobileCurrent);
 
         // Load today's apps from db
-        List<AppItem> appsList = new Select()
-                .from(AppItem.class)
-                .where("timestamp >= ?", getDateTimestamp())
-                .orderBy("wifi_total + mobile_total DESC")
-                .execute();
+//        List<AppItem> appsList = new Select()
+//                .from(AppItem.class)
+//                .where("timestamp >= ?", getDateTimestamp())
+//                .orderBy("wifi_total + mobile_total DESC")
+//                .execute();
+
+        List<AppItem> appsList = AppItem.getData();
 
         // Fill list at first launch / new day or sync apps if new one was installed by user
         if (appsList.isEmpty() || isForcePackageSync) {
@@ -110,18 +112,18 @@ public class Counters {
      */
     private static void syncApplicationList(Context context, List<AppItem> appsList) {
         Log.d(App.LOG, "Counters.class -> syncApplicationList()");
-        // today's midnight timestamp
-        long timestampToday = getDateTimestamp();
+
         // Index by package name
         HashMap<String, AppItem> appsHashMap = new HashMap<String, AppItem>();
         for (AppItem appItem : appsList) {
             appsHashMap.put(appItem.packageName, appItem);
         }
+
         // Get applications list
         List<ApplicationInfo> appsInfoList = getSystemApplications(); // system apps
         appsInfoList.addAll(context.getPackageManager().getInstalledApplications(0)); // installed apps
+
         // Append new day records or newly installed apps to db
-//		ActiveAndroid.beginTransaction();
         for (final ApplicationInfo appInfo : appsInfoList) {
             // skip system applications
             if (
@@ -135,14 +137,13 @@ public class Counters {
             }
             // Create if not exists in db
             if (appsHashMap.get(appInfo.packageName) == null) {
-                AppItem appItem = AppItem.createFromApplicationInfo(context, appInfo, timestampToday);
+                AppItem appItem = AppItem.createFromApplicationInfo(context, appInfo);
                 // First time get current absolute callCounter
                 appItem.lastAbsolute = TrafficStats.getUidRxBytes(appItem.uid) + TrafficStats.getUidTxBytes(appItem.uid);
                 appItem.save();
                 appsList.add(appItem);
             }
         }
-//		ActiveAndroid.endTransaction();
     }
 
     /**

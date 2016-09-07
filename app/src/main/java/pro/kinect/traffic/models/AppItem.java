@@ -39,9 +39,6 @@ public class AppItem extends Model {
     /**
      * Usage date without time e.g. getTimestamp(2014-09-05 00:00:00)
      */
-    @Column(name = "timestamp")
-    public long timestamp;
-
     @Column(name = "mobile_counter")
     public long mobileCounter;
 
@@ -57,13 +54,12 @@ public class AppItem extends Model {
     @Column(name = "last_absolute")
     public long lastAbsolute;
 
-    public static AppItem createFromApplicationInfo(Context context, ApplicationInfo applicationInfo, long timestamp) {
+    public static AppItem createFromApplicationInfo(Context context, ApplicationInfo applicationInfo) {
         Log.d(App.LOG, "AppItem.class -> createFromApplicationInfo()");
         AppItem appItem = new AppItem();
         appItem.uid = applicationInfo.uid;
         appItem.name = getApplicationLabel(context, applicationInfo, Locale.getDefault());
         appItem.packageName = applicationInfo.packageName;
-        appItem.timestamp = timestamp;
         return appItem;
     }
 
@@ -81,7 +77,6 @@ public class AppItem extends Model {
         try {
             result.put("package", packageName);
             result.put("name", name);
-            result.put("date", new java.sql.Date(timestamp).toString());
             result.put("wifi", wifiCounter);
             result.put("mobile", mobileCounter);
 
@@ -94,9 +89,11 @@ public class AppItem extends Model {
 
 
     public static List<AppItem> getData() {
-        List<AppItem> result = new Select().from(AppItem.class).where("last_absolute > 0").limit(1000).execute();
-        if (result == null) result = new ArrayList<>();
-        return result;
+        return new Select().from(AppItem.class)
+                .where(BaseColumns._ID + " > 0")
+                .and("wifi_total + mobile_total > 0")
+                .orderBy("wifi_total + mobile_total DESC")
+                .limit(1000).execute();
     }
 
 }

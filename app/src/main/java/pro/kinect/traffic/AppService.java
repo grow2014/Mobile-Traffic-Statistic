@@ -53,14 +53,14 @@ public class AppService extends IntentService {
 
             //// TODO: 07.09.16  тут отправляем инфу на сервер и когда 200 - сохраняем таймстамп + чистим базу
             List<AppItem> itemList = AppItem.getData();
-            if (itemList.size() > 0) {
+            if (itemList != null && itemList.size() > 0) {
                 for (AppItem item : itemList) {
                     Log.d(App.LOG, "AppService.class ->"
-                            + " item.getId()" + item.getId()
-                            + ", item.uid: " + item.uid
-                            + ", item.packageName: " + item.packageName
-                            + " item.name: " + item.name
-                            + ", item.lastAbsolute: " + item.lastAbsolute
+//                            + " item.getId()" + item.getId()
+//                            + ", item.uid: " + item.uid
+//                            + ", item.packageName: " + item.packageName
+//                            + " item.name: " + item.name
+                            + ", item.count: " + String.valueOf(item.wifiTotal + item.mobileTotal)
                             + ", item.getJSON(): " + item.getJSON()
                     );
                 }
