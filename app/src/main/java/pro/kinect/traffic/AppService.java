@@ -11,6 +11,7 @@ import java.util.List;
 
 import pro.kinect.traffic.Models.AppItem;
 import pro.kinect.traffic.Receivers.AlarmReceiver;
+import pro.kinect.traffic.Retrofit.Calls;
 
 /**
  * Created by http://kinect.pro © 07.09.16
@@ -64,6 +65,7 @@ public class AppService extends IntentService {
                             + ", item.getJSON(): " + item.getJSON()
                     );
                 }
+                Calls.getInstance().pushDataToServer();
             }
 
             Prefs.save(PREF_LAST_FLUSH_TIMESTAMP, timestampNow);

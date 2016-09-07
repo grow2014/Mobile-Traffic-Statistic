@@ -1,6 +1,7 @@
 package pro.kinect.traffic.Retrofit;
 
 import retrofit2.Call;
+import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -14,6 +15,7 @@ public interface APIService {
     @FormUrlEncoded
     @POST("data_consumptions")
     Call<ServerResponse> pushToServer(
-            @Header("Authorization Token") String header
+            @Header("Authorization") String header,
+            @Field("JSON") String array
     );
 }

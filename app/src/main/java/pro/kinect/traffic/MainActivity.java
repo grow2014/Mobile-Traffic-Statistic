@@ -7,6 +7,7 @@ import android.util.Log;
 import java.util.List;
 
 import pro.kinect.traffic.Models.AppItem;
+import pro.kinect.traffic.Retrofit.Calls;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -27,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
                 );
             }
         }
+
+        Calls.getInstance().pushDataToServer();
+
         finish();
     }
 

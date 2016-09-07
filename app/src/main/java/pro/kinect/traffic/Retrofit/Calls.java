@@ -47,7 +47,7 @@ public class Calls {
             logging = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
                 @Override
                 public void log(String message) {
-                    Log.d(App.LOG, "Calls.class -> OKHTTP --->" + message);
+                    Log.d(App.LOG, "Calls.class -> OKHTTP " + message);
                     Platform.get().log(message);
                 }
             });
@@ -101,7 +101,7 @@ public class Calls {
     public void pushDataToServer() {
         Log.d(App.LOG, "Calls.class -> pushDataToServer()");
 
-        Call<ServerResponse> call = service.pushToServer(getHeader());
+        Call<ServerResponse> call = service.pushToServer(getHeader(), "");
         call.enqueue(new Callback<ServerResponse>() {
             @Override
             public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
