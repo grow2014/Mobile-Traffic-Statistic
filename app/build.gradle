@@ -20,12 +20,12 @@ android {
     buildTypes {
 
         debug {
-            buildConfigField "String", "BASE_URL", '"https://app3.usetime.co/"'
+            buildConfigField "String", "BASE_URL", '"https://YOUR___TEST___SERVER.com/"'
             buildConfigField "String", "API_PATH", '"api/v1/"'
         }
 
         release {
-            buildConfigField "String", "BASE_URL", '"https://app3.usetime.co/"'
+            buildConfigField "String", "BASE_URL", '"https://YOUR___WORK___SERVER.com/"'
             buildConfigField "String", "API_PATH", '"api/v1/"'
 
             minifyEnabled false

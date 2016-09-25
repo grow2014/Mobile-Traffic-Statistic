@@ -16,8 +16,8 @@ import pro.kinect.traffic.Receivers.AlarmReceiver;
 
 public class App extends Application {
     public static final String LOG = "Traffic_LOG";
-    public static final int TIME_UPDATE_TRAFFIC_COUNTERS = 1 * 60 * 1000; //1 min
-    public static final int TIME_FLUSH_TRAFFIC_COUNTERS = 4 * 60 * 60 * 1000; //4 hours
+    public static final int TIME_UPDATE_TRAFFIC_COUNTERS = 1 * 65 * 1000; //65 sec
+    public static final int TIME_FLUSH_TRAFFIC_COUNTERS = 10 * 60 * 1000; //10 min
 
     @Override
     public void onCreate() {

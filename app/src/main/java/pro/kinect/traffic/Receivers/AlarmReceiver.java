@@ -5,8 +5,8 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v4.content.WakefulBroadcastReceiver;
-import android.util.Log;
 
 import java.util.Calendar;
 
@@ -38,6 +38,12 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         AlarmManager service = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intentAlarm = new Intent(INTENT_ALARM_TRAFFIC_COUNTERS);
         PendingIntent pending = PendingIntent.getBroadcast(context, 0, intentAlarm, PendingIntent.FLAG_CANCEL_CURRENT);
-        service.set(AlarmManager.RTC_WAKEUP, calUpdater.getTimeInMillis(), pending);
+
+        if (Build.VERSION.SDK_INT>Build.VERSION_CODES.M) {
+            service.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calUpdater.getTimeInMillis(), pending);
+        } else {
+            service.set(AlarmManager.RTC_WAKEUP, calUpdater.getTimeInMillis(), pending);
+        }
+
     }
 }
